@@ -4,14 +4,12 @@ import (
 	"fmt"
 	"go-rest-api/pkg/swagger/server/restapi"
 	"go-rest-api/pkg/swagger/server/restapi/operations"
-	"html"
 	"log"
 	"net/http"
 
 	"github.com/cameracode/pickle-api/pkg/swagger/server/restapi"
 	"github.com/go-openapi/loads"
 	"github.com/go-openapi/runtime/middleware"
-	"golang.org/x/tools/cmd/getgo/server"
 
 	"github.com/cameracode/pickle-api/pkg/swagger/server/restapi/operations"
 )
@@ -26,7 +24,7 @@ func main() {
 	api := operations.NewPickleAPIAPI(swaggerSpec)
 	server := restapi.NewServer(api)
 
-	defer func ()  {
+	defer func() {
 		if err := server.Shutdown(); err != nil {
 			// error handler
 			log.Fatalln(err)
@@ -65,7 +63,9 @@ func GetPickleByName(pickle operations.GetPickleNameParams) middleware.Responder
 	} else {
 		// by default we return Oscar Arakaki's cell-shaded 3D Pickle Rick
 		// Art Credit: https://oki93.artstation.com/projects/K5x2y
-		URL = "https://github.com/cameracode/pickle-api/assets/picklericks/raw/arakaki-picklerick.png"
+		//URL = "https://github.com/cameracode/pickle-api/assets/picklericks/raw/arakaki-picklerick.png"
+		// hardcode URL cuz im a noob
+		URL = "https://raw.githubusercontent.com/cameracode/pickle-api/main/assets/picklericks/arakaki-picklerick.png?token=GHSAT0AAAAAABQ7CMN3ABWRIMCBU5NLBSLKYQ4MIQA"
 	}
 
 	response, err := http.Get(URL)
