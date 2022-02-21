@@ -4,7 +4,7 @@ tasks:
     build:
         desc: Build the app
         cmds:
-        - GOFLAGS=-mod-mod go build -o bin/go-rest-api internal/main.go
+        - GOFLAGS=-mod-mod go build -o bin/pickle-api internal/main.go
 
     run:
         desc: Run the app
@@ -14,7 +14,7 @@ tasks:
     swagger.gen:
         desc: Generate Go code
         cmds:
-        - GOFLAGS=-mod-mod go generate github.com/cameracode/go-rest-api/internal github.com/cameracode/go-rest-api/pkg/swagger
+        - GOFLAGS=-mod-mod go generate github.com/cameracode/pickle-api/internal github.com/cameracode/pickle-api/pkg/swagger
     
     swagger.validate:
         desc: Validate swagger
