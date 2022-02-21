@@ -2,14 +2,12 @@ package main
 
 import (
 	"fmt"
-	"go-rest-api/pkg/swagger/server/restapi"
-	"go-rest-api/pkg/swagger/server/restapi/operations"
 	"log"
 	"net/http"
 
-	"github.com/cameracode/pickle-api/pkg/swagger/server/restapi"
 	"github.com/go-openapi/loads"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/cameracode/pickle-api/pkg/swagger/server/restapi"
 
 	"github.com/cameracode/pickle-api/pkg/swagger/server/restapi/operations"
 )
