@@ -5,11 +5,12 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/cameracode/pickle-api/pkg/swagger/server/restapi"
+	"pickle-api/pkg/swagger/server/restapi"
+
 	"github.com/go-openapi/loads"
 	"github.com/go-openapi/runtime/middleware"
 
-	"github.com/cameracode/pickle-api/pkg/swagger/server/restapi/operations"
+	"pickle-api/pkg/swagger/server/restapi/operations"
 )
 
 func main() {
