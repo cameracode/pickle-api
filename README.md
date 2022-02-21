@@ -1,2 +1,2 @@
-# go-rest-api
+# pickle-api
  
