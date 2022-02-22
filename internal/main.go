@@ -58,7 +58,8 @@ func GetHelloUser(user operations.GetHelloUserParams) middleware.Responder {
 func GetPickleByName(pickle operations.GetPickleNameParams) middleware.Responder {
 	var URL string
 	if pickle.Name != "" {
-		URL = "https://github.com/cameracode/pickle-api/assets/picklericks/raw/" + pickle.Name + ".png"
+		//URL = "https://github.com/cameracode/pickle-api/assets/picklericks/raw/" + pickle.Name + ".png"
+		URL = "https://raw.githubusercontent.com/cameracode/pickle-api/main/assets/picklericks/" + pickle.Name + ".png?token=GHSAT0AAAAAABQ7CMN2NGO6EARJIXKO3PJWYQ4P5GQ"
 	} else {
 		// by default we return Oscar Arakaki's cell-shaded 3D Pickle Rick
 		// Art Credit: https://oki93.artstation.com/projects/K5x2y
