@@ -59,13 +59,13 @@ func GetPickleByName(pickle operations.GetPickleNameParams) middleware.Responder
 	var URL string
 	if pickle.Name != "" {
 		//URL = "https://github.com/cameracode/pickle-api/assets/picklericks/raw/" + pickle.Name + ".png"
-		URL = "https://raw.githubusercontent.com/cameracode/pickle-api/main/assets/picklericks/" + pickle.Name + ".png?token=GHSAT0AAAAAABQ7CMN2NGO6EARJIXKO3PJWYQ4P5GQ"
+		URL = "https://raw.githubusercontent.com/cameracode/ricksofpickle/Develop/" + pickle.Name + ".png"
 	} else {
 		// by default we return Oscar Arakaki's cell-shaded 3D Pickle Rick
 		// Art Credit: https://oki93.artstation.com/projects/K5x2y
 		//URL = "https://github.com/cameracode/pickle-api/assets/picklericks/raw/arakaki-picklerick.png"
 		// hardcode URL cuz im a noob
-		URL = "https://raw.githubusercontent.com/cameracode/pickle-api/main/assets/picklericks/arakaki-picklerick.png?token=GHSAT0AAAAAABQ7CMN3ABWRIMCBU5NLBSLKYQ4MIQA"
+		URL = "https://raw.githubusercontent.com/cameracode/ricksofpickle/Develop/arakaki-picklerick.png"
 	}
 
 	response, err := http.Get(URL)
