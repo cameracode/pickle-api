@@ -49,6 +49,11 @@ func configureAPI(api *operations.PickleAPIAPI) http.Handler {
 			return middleware.NotImplemented("operation operations.GetPickleName has not yet been implemented")
 		})
 	}
+	if api.GetPicklesHandler == nil {
+		api.GetPicklesHandler = operations.GetGophersHandlerFunc(func(params operations.GetPicklesParaams) middleware.Responder {
+			return middleware.NotImplemented("operation operations.GetPickles has not yet been implemented")
+		})
+	}
 	if api.CheckHealthHandler == nil {
 		api.CheckHealthHandler = operations.CheckHealthHandlerFunc(func(params operations.CheckHealthParams) middleware.Responder {
 			return middleware.NotImplemented("operation operations.CheckHealth has not yet been implemented")
