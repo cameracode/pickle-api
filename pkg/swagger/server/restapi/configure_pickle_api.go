@@ -49,8 +49,13 @@ func configureAPI(api *operations.PickleAPIAPI) http.Handler {
 			return middleware.NotImplemented("operation operations.GetPickleName has not yet been implemented")
 		})
 	}
+	if api.GetPickleRandomHandler == nil {
+		api.GetPickleRandomHandler = operations.GetPickleRandomHandlerFunc(func(params operations.GetPickleRandomParams) middleware.Responder {
+			return middleware.NotImplemented("operation operations.GetPickleRandom has not yet been implemented")
+		})
+	}
 	if api.GetPicklesHandler == nil {
-		api.GetPicklesHandler = operations.GetGophersHandlerFunc(func(params operations.GetPicklesParaams) middleware.Responder {
+		api.GetPicklesHandler = operations.GetPicklesHandlerFunc(func(params operations.GetPicklesParams) middleware.Responder {
 			return middleware.NotImplemented("operation operations.GetPickles has not yet been implemented")
 		})
 	}

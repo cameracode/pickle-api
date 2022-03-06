@@ -6,8 +6,9 @@ info:
   version: 0.1.0
 produces:
 - application/json
-schemes:
-- http
+#schemes:
+#- http
+
 swagger: "2.0"
 
 paths:
@@ -23,7 +24,6 @@ paths:
             type: string
             enum:
             - OK
-
   /hello/{user}:
     get:
       description: Returns a greeting to the user!
@@ -40,7 +40,6 @@ paths:
             type: string
         400:
           description: Invalid characters in "user" were provided.
-
   /pickle/{name}:
     get:
       description: Return the Pickle Rick Image.
@@ -52,31 +51,36 @@ paths:
           type: string
           required: true
           description: The name of the Pickle Rick to display.
+        - name: size
+          in : query
+          type: string
+          required: false
+          description: Size for your Pickle Rick
       responses:
         200:
           description: Returns the Pickle Rick
           schema:
             type: file
-
+        400:
+          description: Invalid characters in "name" were provided.
   /pickles:
     get:
       description: List all the pickles
       produces:
-      - application/json
+       - application/json
       parameters:
-      - name: name
-        in: query
-        type: string
-        required: false
-        description: Pickle name
+        - name: name
+          in: query
+          type: string
+          required: false
+          description: Pickle name
       responses:
         200:
           description: Return the Pickles list.
           schema:
             type: array
             items:
-              $reg: '#/definitions/Pickle'
-
+              $ref: '#/definitions/Pickle'
   /pickle/random:
     get:
       description: Return a random Pickle Image
@@ -95,7 +99,6 @@ paths:
             type: file
         400:
           description: there is something wrong in the path
-
 definitions:
   Pickle:
     type: object

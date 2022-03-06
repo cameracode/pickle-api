@@ -24,9 +24,6 @@ func init() {
   "produces": [
     "application/json"
   ],
-  "schemes": [
-    "http"
-  ],
   "swagger": "2.0",
   "info": {
     "description": "HTTP server in Go with Swagger endpoints definition.",
@@ -78,6 +75,33 @@ func init() {
         }
       }
     },
+    "/pickle/random": {
+      "get": {
+        "description": "Return a random Pickle Image",
+        "produces": [
+          "image/png"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Size for your Pickle ('x-small','small','medium')",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a random pickle rick.",
+            "schema": {
+              "type": "file"
+            }
+          },
+          "400": {
+            "description": "there is something wrong in the path"
+          }
+        }
+      }
+    },
     "/pickle/{name}": {
       "get": {
         "description": "Return the Pickle Rick Image.",
@@ -91,6 +115,12 @@ func init() {
             "name": "name",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "description": "Size for your Pickle Rick",
+            "name": "size",
+            "in": "query"
           }
         ],
         "responses": {
@@ -99,7 +129,56 @@ func init() {
             "schema": {
               "type": "file"
             }
+          },
+          "400": {
+            "description": "Invalid characters in \"name\" were provided."
           }
+        }
+      }
+    },
+    "/pickles": {
+      "get": {
+        "description": "List all the pickles",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Pickle name",
+            "name": "name",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the Pickles list.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Pickle"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Pickle": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "my-pickle"
+        },
+        "path": {
+          "type": "string",
+          "example": "my-pickle.png"
+        },
+        "url": {
+          "type": "string",
+          "example": "https://raw.githubusercontent.com/cameracode/ricksofpickle/Develop/arakaki-picklerick.png"
         }
       }
     }
@@ -112,9 +191,6 @@ func init() {
   "produces": [
     "application/json"
   ],
-  "schemes": [
-    "http"
-  ],
   "swagger": "2.0",
   "info": {
     "description": "HTTP server in Go with Swagger endpoints definition.",
@@ -166,6 +242,33 @@ func init() {
         }
       }
     },
+    "/pickle/random": {
+      "get": {
+        "description": "Return a random Pickle Image",
+        "produces": [
+          "image/png"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Size for your Pickle ('x-small','small','medium')",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a random pickle rick.",
+            "schema": {
+              "type": "file"
+            }
+          },
+          "400": {
+            "description": "there is something wrong in the path"
+          }
+        }
+      }
+    },
     "/pickle/{name}": {
       "get": {
         "description": "Return the Pickle Rick Image.",
@@ -179,6 +282,12 @@ func init() {
             "name": "name",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "description": "Size for your Pickle Rick",
+            "name": "size",
+            "in": "query"
           }
         ],
         "responses": {
@@ -187,7 +296,56 @@ func init() {
             "schema": {
               "type": "file"
             }
+          },
+          "400": {
+            "description": "Invalid characters in \"name\" were provided."
           }
+        }
+      }
+    },
+    "/pickles": {
+      "get": {
+        "description": "List all the pickles",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Pickle name",
+            "name": "name",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the Pickles list.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Pickle"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Pickle": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "my-pickle"
+        },
+        "path": {
+          "type": "string",
+          "example": "my-pickle.png"
+        },
+        "url": {
+          "type": "string",
+          "example": "https://raw.githubusercontent.com/cameracode/ricksofpickle/Develop/arakaki-picklerick.png"
         }
       }
     }

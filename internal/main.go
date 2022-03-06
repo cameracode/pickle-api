@@ -1,19 +1,30 @@
 package main
 
 import (
+	"bytes"
+	"context"
 	"fmt"
 	"image"
+	"image/color"
+	"image/png"
+	"io"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
+	"strings"
 	"time"
 
+	"pickle-api/pkg/swagger/server/models"
 	"pickle-api/pkg/swagger/server/restapi"
+	"pickle-api/pkg/swagger/server/restapi/operations"
 
+	"github.com/disintegration/imaging"
+	"github.com/fogleman/gg"
 	"github.com/go-openapi/loads"
 	"github.com/go-openapi/runtime/middleware"
-
-	"pickle-api/pkg/swagger/server/restapi/operations"
+	"github.com/google/go-github/v43/github"
 )
 
 func main() {
@@ -24,6 +35,9 @@ func main() {
 	}
 
 	api := operations.NewPickleAPIAPI(swaggerSpec)
+	// Use SwaggerUI instead of reDoc on /docs
+	api.UseSwaggerUI()
+
 	server := restapi.NewServer(api)
 
 	defer func() {
@@ -41,7 +55,7 @@ func main() {
 
 	api.GetPickleNameHandler = operations.GetPickleNameHandlerFunc(GetPickleByName)
 
-	api.GetPicklesHandler = operations.GetGophersHandlerFunc(GetGophers)
+	api.GetPicklesHandler = operations.GetPicklesHandlerFunc(GetPickles)
 
 	api.GetPickleRandomHandler = operations.GetPickleRandomHandlerFunc(GetPickleRandom)
 
@@ -82,7 +96,7 @@ func GetPickleByName(pickle operations.GetPickleNameParams) middleware.Responder
 	defer response.Body.Close()
 
 	if response.StatusCode != 200 {
-		srcImage, _ := getPickleGopherError("Oops, Error")
+		srcImage, _ := getBladedPickleError("Oops, Error")
 		return operations.NewGetPickleNameOK().WithPayload(convertImgToIoCloser(srcImage))
 	}
 
@@ -133,7 +147,7 @@ func GetPickleRandom(pickle operations.GetPickleRandomParams) middleware.Respond
 	response, err := http.Get(URL)
 	if err != nil {
 		fmt.Println("error")
-		srcImage, _ := getFirePickleError("Oops, Error")
+		srcImage, _ := getBladedPickleError("Oops, Error")
 		return operations.NewGetPickleNameOK().WithPayload(convertImgToIoCloser(srcImage))
 	}
 	defer response.Body.Close()
@@ -148,4 +162,115 @@ func GetPickleRandom(pickle operations.GetPickleRandomParams) middleware.Respond
 	}
 
 	return operations.NewGetPickleNameOK().WithPayload(convertImgToIoCloser(srcImage))
+}
+
+/*
+Display Bladed Pickle Rick with a message (error)
+*/
+func getBladedPickleError(message string) (image.Image, error) {
+	// open local file
+	file, err := os.Open("./assets/bladed_picklerick.png")
+	if err != nil {
+		log.Fatalf("failed to Open bladed_picklerick image: %v", err)
+	}
+
+	srcImage, _, err := image.Decode(file)
+	if err != nil {
+		log.Fatalf("failed to Deecode image: %v", err)
+		return srcImage, err
+	}
+	// Add text on Pickle Rick
+	srcImage, err = TextOnPickleRick(srcImage, "Oops, Error! Pickle Rick has blades, dawg!")
+
+	// Resize Image
+	srcImage = resizeImage(srcImage, "medium")
+	if err != nil {
+		log.Fatalf("failed to put Text on Pickle Rick: %v", err)
+		return srcImage, err
+	}
+
+	return srcImage, nil
+}
+
+/*
+Get List of Pickle Ricks from cameracode repo
+*/
+func GetPicklesList() []*models.Pickle {
+	client := github.NewClient(nil)
+
+	// list public repos for org "github"
+	ctx := context.Background()
+	// list all repos for the authenticated user
+	_, directoryContent, _, err := client.Repositories.GetContents(ctx, "cameracode", "ricksofpickle", "/", nil)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var arr []*models.Pickle
+
+	for _, c := range directoryContent {
+		if *c.Name == ".gtiignore" || *c.Name == "README.md" {
+			continue
+		}
+
+		var name string = strings.Split(*c.Name, ".")[0]
+		arr = append(arr, &models.Pickle{name, *c.Path, *c.DownloadURL})
+	}
+	return arr
+}
+
+/*
+Resize Image
+*/
+func resizeImage(srcImage image.Image, size string) image.Image {
+	var height int
+	switch size {
+	case "x-small":
+		height = 50
+	case "small":
+		height = 100
+	case "medium":
+		height = 300
+	default:
+		// Lulzbotz
+		height = 1000
+	}
+
+	// Resize the cropped image to width = 200px preserving the aspect ratio
+	srcImage = imaging.Resize(srcImage, 0, height, imaging.Lanczos)
+
+	return srcImage
+}
+
+/*
+Convert Image to io.close (for reply format)
+*/
+func convertImgToIoCloser(srcImage image.Image) io.ReadCloser {
+	encoded := &bytes.Buffer{}
+	png.Encode(encoded, srcImage)
+
+	return ioutil.NopCloser(encoded)
+}
+
+/*
+Add text on Image
+*/
+func TextOnPickleRick(bgImage image.Image, text string) (image.Image, error) {
+	imgWidth := bgImage.Bounds().Dx()
+	imgHeight := bgImage.Bounds().Dy()
+
+	dc := gg.NewContext(imgWidth, imgHeight)
+	dc.DrawImage(bgImage, 0, 0)
+
+	if err := dc.LoadFontFace("assets/FireSans-Light.ttf", 50); err != nil {
+		return nil, err
+	}
+
+	x := float64((imgWidth / 2))
+	y := float64((imgHeight / 12))
+	maxWidth := float64(imgWidth) - 60.0
+	dc.SetColor(color.Black)
+	dc.DrawStringWrapped(text, x, y, 0.5, 0.5, maxWidth, 1.5, gg.AlignRight)
+
+	return dc.Image(), nil
 }

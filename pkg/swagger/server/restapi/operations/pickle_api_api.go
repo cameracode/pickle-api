@@ -50,6 +50,12 @@ func NewPickleAPIAPI(spec *loads.Document) *PickleAPIAPI {
 		GetPickleNameHandler: GetPickleNameHandlerFunc(func(params GetPickleNameParams) middleware.Responder {
 			return middleware.NotImplemented("operation GetPickleName has not yet been implemented")
 		}),
+		GetPickleRandomHandler: GetPickleRandomHandlerFunc(func(params GetPickleRandomParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetPickleRandom has not yet been implemented")
+		}),
+		GetPicklesHandler: GetPicklesHandlerFunc(func(params GetPicklesParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetPickles has not yet been implemented")
+		}),
 		CheckHealthHandler: CheckHealthHandlerFunc(func(params CheckHealthParams) middleware.Responder {
 			return middleware.NotImplemented("operation CheckHealth has not yet been implemented")
 		}),
@@ -99,6 +105,10 @@ type PickleAPIAPI struct {
 	GetHelloUserHandler GetHelloUserHandler
 	// GetPickleNameHandler sets the operation handler for the get pickle name operation
 	GetPickleNameHandler GetPickleNameHandler
+	// GetPickleRandomHandler sets the operation handler for the get pickle random operation
+	GetPickleRandomHandler GetPickleRandomHandler
+	// GetPicklesHandler sets the operation handler for the get pickles operation
+	GetPicklesHandler GetPicklesHandler
 	// CheckHealthHandler sets the operation handler for the check health operation
 	CheckHealthHandler CheckHealthHandler
 
@@ -189,6 +199,12 @@ func (o *PickleAPIAPI) Validate() error {
 	}
 	if o.GetPickleNameHandler == nil {
 		unregistered = append(unregistered, "GetPickleNameHandler")
+	}
+	if o.GetPickleRandomHandler == nil {
+		unregistered = append(unregistered, "GetPickleRandomHandler")
+	}
+	if o.GetPicklesHandler == nil {
+		unregistered = append(unregistered, "GetPicklesHandler")
 	}
 	if o.CheckHealthHandler == nil {
 		unregistered = append(unregistered, "CheckHealthHandler")
@@ -293,6 +309,14 @@ func (o *PickleAPIAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/pickle/{name}"] = NewGetPickleName(o.context, o.GetPickleNameHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/pickle/random"] = NewGetPickleRandom(o.context, o.GetPickleRandomHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/pickles"] = NewGetPickles(o.context, o.GetPicklesHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

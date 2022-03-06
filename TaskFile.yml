@@ -14,12 +14,12 @@ tasks:
     swagger.gen:
         desc: Generate Go code
         cmds:
-        - GOFLAGS=-mod=mod go generate github.com/cameracode/pickle-api/internal github.com/cameracode/pickle-api/pkg/swagger
+        - GOFLAGS=-mod=mod go generate /pickle-api/internal /pickle-api/pkg/swagger
     
     swagger.validate:
         desc: Validate swagger
         cmds:
-        - swagger validate pkg/swagger/swagger.yml
+        - swagger validate ./pkg/swagger/swagger.yml
 
     swagger.doc:
         desc: Doc for swagger

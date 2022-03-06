@@ -53,3 +53,27 @@ func (o *GetPickleNameOK) WriteResponse(rw http.ResponseWriter, producer runtime
 		panic(err) // let the recovery middleware deal with this
 	}
 }
+
+// GetPickleNameBadRequestCode is the HTTP code returned for type GetPickleNameBadRequest
+const GetPickleNameBadRequestCode int = 400
+
+/*GetPickleNameBadRequest Invalid characters in "name" were provided.
+
+swagger:response getPickleNameBadRequest
+*/
+type GetPickleNameBadRequest struct {
+}
+
+// NewGetPickleNameBadRequest creates GetPickleNameBadRequest with default headers values
+func NewGetPickleNameBadRequest() *GetPickleNameBadRequest {
+
+	return &GetPickleNameBadRequest{}
+}
+
+// WriteResponse to the client
+func (o *GetPickleNameBadRequest) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(400)
+}
